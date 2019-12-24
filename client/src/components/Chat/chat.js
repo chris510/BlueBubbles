@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Join = () => {
+const Chat = () => {
   return (
     <div>
-      Join
+      Chat
     </div>
   )
 }
 
-export default Join
+export default Chat
