@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'react-router-dom'
 import './infobar.css';
 import closeIcon from '../../icons/closeIcon.png';
 import onlineIcon from '../../icons/onlineIcon.png';
