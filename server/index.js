@@ -20,9 +20,15 @@ io.on('connection', (socket) => {
 
   socket.on('join', ({ name, room }, callback) => {
     console.log(name, room)
-    console.log(socket.id)
-    const { error, user } = addUser({id: socket.id, name, room});
 
+    const { error, user } = addUser({id: socket.id, name, room});
+    
+    let usersInRoom = getUsersInRoom(room);
+    usersInRoom.forEach((user) => {
+      if (user.name === name) console.log('username taken!')
+    })
+
+    // console.log(user);
     if (error) return callback(error);
 
     socket.emit('message', { user: 'admin', text: `${user.name}, welcome to the room ${user.room}`})
@@ -44,8 +50,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
-    // console.log('User left.')
-    const user = removeUser(socket.id);
+    let user = removeUser(socket.id);
     if (user) {
       io.to(user.room).emit('message', {user: 'admin', 'text': `${user.name} has left`})
     }

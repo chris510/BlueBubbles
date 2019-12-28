@@ -20,6 +20,7 @@ const Chat = ({ location }) => {
   const [messages, setMessages] = useState([]);
   const serverEndPoint = 'localhost:5000'
   let socket = useContext(SocketContext)
+  // console.log(Object.values(users));
 
   useEffect(() => {
     // gives us the url
@@ -62,6 +63,7 @@ const Chat = ({ location }) => {
     socket.on('roomData', ({ users }) => {
       setUsers(users);
     })
+
     return () => {
       socket.emit('disconnect');
       socket.off();
