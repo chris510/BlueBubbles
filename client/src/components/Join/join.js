@@ -9,6 +9,8 @@ const Join = () => {
 
   const handleSignIn = e => {
     //If the name or room is not inputted, button doesn't do anything
+    localStorage.setItem('name', `${name}`);
+    localStorage.setItem('room', `${room}`);
     return (!name || !room ) ? e.preventDefault() : null
   }
 

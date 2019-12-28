@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import queryString from 'query-string';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
 import './chat.css';
 
@@ -8,8 +8,9 @@ import InfoBar from '../infobar/infobar';
 import Input from '../input/input';
 import Messages from '../messages/messages';
 import People from '../people/people';
+import SocketContext from '../socket_context';
 
-let socket;
+// let socket;
 
 const Chat = ({ location }) => {
   const [name, setName] = useState('');
@@ -18,28 +19,38 @@ const Chat = ({ location }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const serverEndPoint = 'localhost:5000'
+  let socket = useContext(SocketContext)
 
   useEffect(() => {
     // gives us the url
     // const data = queryString.parse(location.search);
-    const { name, room } = queryString.parse(location.search);
-    // console.log(data);
-    // console.log(location.search);
-
-    socket = io(serverEndPoint);
-    console.log(socket);
-    
+    let { name, room } = queryString.parse(location.search);
+    console.log(location.search)
+    // socket = io(serverEndPoint);
     setName(name);
     setRoom(room);
+    // localStorage.setItem('id', `${socket.id}`);
 
-    socket.emit('join', { name, room }, () => {
-      // if (error) alert(error);
+    // socket = io(serverEndPoint);
+    // setName(name);
+    // setRoom(room);
+    // localStorage.setItem('name', `${name}`);
+    // localStorage.setItem('room', `${room}`);
+    // console.log(name);
+    // console.log(room);
+    
+    socket.emit('join', { name, room }, (error) => {
+      if (error) alert(error);
+      // console.log(socket);
+      console.log(socket.id)
+      localStorage.setItem('id', `${socket.id}`);
     });
 
     return () => {
       socket.emit('disconnect');
       socket.off();
     }
+  
   }, [serverEndPoint, location.search]);
 
   useEffect(() => {
@@ -51,6 +62,10 @@ const Chat = ({ location }) => {
     socket.on('roomData', ({ users }) => {
       setUsers(users);
     })
+    return () => {
+      socket.emit('disconnect');
+      socket.off();
+    }
 
   }, [messages]);
 
@@ -60,8 +75,6 @@ const Chat = ({ location }) => {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
-
-  console.log(message, messages);
 
   return (
     <div className="chat-wrapper">

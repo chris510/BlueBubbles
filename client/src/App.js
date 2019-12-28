@@ -24,13 +24,13 @@ const App = ( props ) => {
   `;
   
   return (
-  <div className="app">
-    <Button onClick={() => themeToggle.toggle()}>
-      {props.theme.mode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
-    </Button>
+    <div className="app">
     <BrowserRouter>
-        <Route path="/" exact component={Join} />
-        <Route path="/chat" exact component={Chat} />
+      <Button onClick={() => themeToggle.toggle()}>
+        {props.theme.mode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      </Button>
+      <Route path="/" exact component={Join} />
+      <Route path="/chat" exact component={Chat} />
     </BrowserRouter>
   </div>
   )
